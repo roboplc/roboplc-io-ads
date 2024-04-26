@@ -16,7 +16,7 @@ The crate IS NOT FREE for any commercial or production use. Please refer to
 information.
 
 The
-[specification](https://infosys.beckhoff.com/english.php?content=../content/1033/tc3_ads_over_mqtt/index.html&id=)
+[specification](https://infosys.beckhoff.com/english.php?content=../content/1033/tcinfosys3/11291871243.html&id=6446904803799887467)
 can be found on their Information System pages.
 
 # Example
