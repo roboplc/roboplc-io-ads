@@ -1,5 +1,5 @@
 <h2>
-  RoboPLC Pro I/O connector for TwinCAT/ADS
+  RoboPLC I/O connector for TwinCAT/ADS
   <a href="https://crates.io/crates/roboplc-io-ads"><img alt="crates.io page" src="https://img.shields.io/crates/v/roboplc-io-ads.svg"></img></a>
   <a href="https://docs.rs/roboplc-io-ads"><img alt="docs.rs page" src="https://docs.rs/roboplc-io-ads/badge.svg"></img></a>
 </h2>
