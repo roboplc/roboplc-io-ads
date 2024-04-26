@@ -24,8 +24,8 @@ furnished to do so, subject to the following conditions:
 2. The Software may be used for testing purposes without a purchased license.
 
 3. Certain parts of the Software are available under the MIT License or the
-   Apache License. For open-source parts, switch to using the library available at:
-   https://github.com/birkenfeld/ads-rs
+   Apache License. For the free parts, switch to using the library available
+   at: https://github.com/birkenfeld/ads-rs
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
