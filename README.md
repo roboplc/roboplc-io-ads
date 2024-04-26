@@ -9,15 +9,17 @@
 ADS is the native protocol used by programmable logic controllers (PLCs) and
 the TwinCAT automation system produced by [Beckhoff GmbH](https://www.beckhoff.com/).
 
+The
+[ADS
+specification](https://infosys.beckhoff.com/english.php?content=../content/1033/tcinfosys3/11291871243.html&id=6446904803799887467)
+can be found on Beckhoff Information System pages.
+
+
 This crate provides I/O connector for [RoboPLC](https://www.roboplc.com/).
 
 The crate IS NOT FREE for any commercial or production use. Please refer to
 <https://github.com/roboplc/roboplc-io-ads/blob/main/LICENSE.md> for more
 information.
-
-The
-[specification](https://infosys.beckhoff.com/english.php?content=../content/1033/tcinfosys3/11291871243.html&id=6446904803799887467)
-can be found on their Information System pages.
 
 # Example
 
