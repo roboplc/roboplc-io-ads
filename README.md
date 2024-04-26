@@ -1,14 +1,19 @@
-# RoboPLC Pro I/O connector for TwinCAT/ADS
+<h2>
+  RoboPLC Pro I/O connector for TwinCAT/ADS
+  <a href="https://crates.io/crates/roboplc-io-ads"><img alt="crates.io page" src="https://img.shields.io/crates/v/roboplc-io-ads.svg"></img></a>
+  <a href="https://docs.rs/roboplc-io-ads"><img alt="docs.rs page" src="https://docs.rs/roboplc-io-ads/badge.svg"></img></a>
+</h2>
 
 # Introduction
 
 ADS is the native protocol used by programmable logic controllers (PLCs) and
 the TwinCAT automation system produced by [Beckhoff GmbH](https://www.beckhoff.com/).
 
+This crate provides I/O connector for [RoboPLC](https://www.roboplc.com/).
+
 The crate IS NOT FREE for any commercial or production use. Please refer to
 <https://github.com/roboplc/roboplc-io-ads/blob/main/LICENSE.md> for more
 information.
-
 
 The
 [specification](https://infosys.beckhoff.com/english.php?content=../content/1033/tc3_ads_over_mqtt/index.html&id=)
