@@ -4,7 +4,7 @@ Licensed under the Bohemia Automation License (BAL);
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at:
 
-http://www.bohemia-automation.com
+https://www.bohemia-automation.com
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@ furnished to do so, subject to the following conditions:
 
 1. The Software is open-source but not free to use. A license must be purchased
    from Bohemia Automation for any modifications, commercial or production use
-   at: http://www.bohemia-automation.com
+   at: https://www.bohemia-automation.com
 
 2. The Software may be used for testing purposes without a purchased license.
 
