@@ -1,6 +1,6 @@
 [package]
 name = "roboplc-io-ads"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2021"
 authors = ["Serhij S. <div@altertech.com>"]
 license-file = "LICENSE.md"
