@@ -14,9 +14,9 @@ autoexamples = false
 bma-ts = { version = "0.1.10" }
 byteorder = "1.5.0"
 itertools = "0.12.1"
-oneshot = { version = "0.1.6", default-features = false, features = ["std"] }
-parking_lot = "0.12.1"
+parking_lot_rt = "0.12.1"
 roboplc = "0.3"
+rtsc = "0.1.11"
 tracing = { version = "0.1.40", features = ["log"] }
 zerocopy = "0.6"
 

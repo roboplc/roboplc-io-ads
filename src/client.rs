@@ -12,13 +12,14 @@ use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use parking_lot::Mutex;
+use parking_lot_rt::Mutex;
 use roboplc::{pchannel, DataDeliveryPolicy, Error, Result};
 
 use byteorder::{ByteOrder, ReadBytesExt as _, LE};
 use itertools::Itertools;
 use roboplc::comm::{CommReader, SessionGuard, Timeouts};
 use roboplc::pchannel::{Receiver, Sender};
+use rtsc::cell::DataCell;
 use tracing::{debug, error, trace, warn};
 
 use crate::errors::ads_error;
@@ -39,7 +40,7 @@ impl DataDeliveryPolicy for AdsCommResult {}
 const MAX_NOTIFICATION_QUEUE: usize = 16384;
 const MAX_BUF_QUEUE: usize = 1024;
 
-type ReplyMap = Arc<Mutex<BTreeMap<u32, oneshot::Sender<AdsCommResult>>>>;
+type ReplyMap = Arc<Mutex<BTreeMap<u32, DataCell<AdsCommResult>>>>;
 
 /// An ADS protocol command.
 // https://infosys.beckhoff.com/content/1033/tc3_ads_intro/115847307.html?id=7738940192708835096
@@ -351,8 +352,8 @@ impl ClientInner {
             request.extend_from_slice(buf);
         }
         // &T impls Write for T: Write, so no &mut self required.
-        let (tx, reply_recv) = oneshot::channel();
-        self.reply_map.lock().insert(invoke_id, tx);
+        let cell = DataCell::new();
+        self.reply_map.lock().insert(invoke_id, cell.clone());
         self.client.write(&request)?;
 
         macro_rules! map_ch_err {
@@ -369,9 +370,9 @@ impl ClientInner {
 
         // Get a reply from the reader thread, with timeout or not.
         let reply = if let Some(tmo) = self.read_timeout {
-            map_ch_err!(reply_recv.recv_timeout(tmo))
+            map_ch_err!(cell.get_timeout(tmo))
         } else {
-            map_ch_err!(reply_recv.recv())
+            map_ch_err!(cell.get())
         }
         .0
         .map_err(Error::io)?;
@@ -579,10 +580,7 @@ impl Reader {
                 match ptr.read_u32::<LE>() {
                     Ok(invoke_id) => {
                         if let Some(tx) = self.reply_map.lock().remove(&invoke_id) {
-                            if let Err(error) = tx.send(AdsCommResult(Ok(buf))) {
-                                warn!(%error, invoke_id,
-                                    "unable to send reply back, client is gone?");
-                            }
+                            tx.set(AdsCommResult(Ok(buf)));
                         }
                     }
                     Err(e) => {
