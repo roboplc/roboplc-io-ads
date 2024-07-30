@@ -12,14 +12,13 @@ use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use parking_lot_rt::Mutex;
-use roboplc::{pchannel, DataDeliveryPolicy, Error, Result};
+use roboplc::locking::{Condvar, Mutex, RawMutex};
+use roboplc::{policy_channel, DataDeliveryPolicy, Error, Result};
 
 use byteorder::{ByteOrder, ReadBytesExt as _, LE};
 use itertools::Itertools;
 use roboplc::comm::{CommReader, SessionGuard, Timeouts};
-use roboplc::pchannel::{Receiver, Sender};
-use rtsc::cell::DataCell;
+use roboplc::policy_channel::{Receiver, Sender};
 use tracing::{debug, error, trace, warn};
 
 use crate::errors::ads_error;
@@ -40,6 +39,7 @@ impl DataDeliveryPolicy for AdsCommResult {}
 const MAX_NOTIFICATION_QUEUE: usize = 16384;
 const MAX_BUF_QUEUE: usize = 1024;
 
+type DataCell<P> = rtsc::cell::DataCell<P, RawMutex, Condvar>;
 type ReplyMap = Arc<Mutex<BTreeMap<u32, DataCell<AdsCommResult>>>>;
 
 /// An ADS protocol command.
@@ -268,14 +268,14 @@ impl ClientInner {
             }
         };
 
-        let (buf_send, buf_recv) = pchannel::bounded(MAX_BUF_QUEUE);
-        let (notif_send, notif_recv) = pchannel::bounded(MAX_NOTIFICATION_QUEUE);
+        let (buf_send, buf_recv) = policy_channel::bounded(MAX_BUF_QUEUE);
+        let (notif_send, notif_recv) = policy_channel::bounded(MAX_NOTIFICATION_QUEUE);
         let mut source_bytes = [0; 8];
         source.write_to(&mut &mut source_bytes[..]).expect("size");
 
         let reply_map = Arc::new(Mutex::new(BTreeMap::new()));
 
-        let (restart_tx, restart_rx) = pchannel::bounded(1);
+        let (restart_tx, restart_rx) = policy_channel::bounded(1);
 
         let reader = Reader {
             client: client.clone(),
@@ -474,7 +474,7 @@ impl DataDeliveryPolicy for RestartEvent {
 pub struct Reader {
     client: roboplc::comm::Client,
     reply_map: ReplyMap,
-    reader_rx: roboplc::pchannel::Receiver<CommReader>,
+    reader_rx: roboplc::policy_channel::Receiver<CommReader>,
     source: [u8; 8],
     buf_recv: Receiver<AdsBuffer>,
     notif_send: Sender<notif::Notification>,

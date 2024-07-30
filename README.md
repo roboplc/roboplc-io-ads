@@ -112,3 +112,7 @@ The commercial client additionally supports:
 Note: as the client has got an asynchronous-manner reader loop, it is HIGHLY RECOMMENDED to use
 timeouts. In case if a remote does not respond, a request with no timeout gets stuck forever.
 
+## Locking policy
+
+The crate locking policy is set using the same features as RoboPLC locking
+policy. The selected policy must be the same.

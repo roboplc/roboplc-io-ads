@@ -1,5 +1,5 @@
 use ads::notif::{Attributes, Sample, TransmissionMode};
-use roboplc::{comm::Timeouts, prelude::*, time::interval, Result};
+use roboplc::{comm::Timeouts, locking::Mutex, prelude::*, time::interval, Result};
 use roboplc_io_ads as ads;
 use tracing::{error, info, warn};
 
@@ -10,7 +10,7 @@ type Message = ();
 
 #[derive(Default)]
 struct Variables {
-    nh: NHandles,
+    nh: Mutex<NHandles>,
 }
 
 #[binrw]
@@ -66,7 +66,7 @@ impl Worker<Message, Variables> for NotifSub {
                 continue;
             }
             info!(session_id = s_lock.session_id(), "recreating handles");
-            if let Err(e) = self.create_handles(&mut context.variables().write().nh) {
+            if let Err(e) = self.create_handles(&mut context.variables().nh.lock()) {
                 error!(worker=self.worker_name(), %e);
                 continue;
             }
@@ -108,7 +108,7 @@ impl Worker<Message, Variables> for NotificationHandler {
             match rx.recv() {
                 Ok(frame) => {
                     for sample in frame.samples() {
-                        if let Err(e) = self.process_sample(sample, &context.variables().read().nh)
+                        if let Err(e) = self.process_sample(sample, &context.variables().nh.lock())
                         {
                             error!(worker=self.worker_name(), %e);
                         }
